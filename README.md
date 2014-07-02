@@ -20,7 +20,7 @@ Or install it yourself as:
 
 Set the defaults for your client:
 
-    Gigya::Client.defaults api_key: 'GIGYA-API-KEY', secret: 'GIGYA-SECRET'
+    Gigya::Client.defaults = api_key: 'GIGYA-API-KEY', secret: 'GIGYA-SECRET'
 
 Instantiate a client for the API endpoint you want with either a UID or OAuth Token:
 
