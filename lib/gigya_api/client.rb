@@ -7,7 +7,11 @@ module GigyaApi
       open_timeout: 30
     }
 
-    def self.defaults(options)
+    def self.defaults
+      @@defaults
+    end
+
+    def self.defaults=(options)
       @@defaults == options
     end
 
@@ -57,8 +61,8 @@ module GigyaApi
     class HttpClient
       def execute(method, url, params)
         resource = RestClient::Resource.new url, 
-          :timeout => @@defaults[:timeout], 
-          :open_timeout => @@defaults[:open_timeout]
+          :timeout => defaults[:timeout], 
+          :open_timeout => defaults[:open_timeout]
         resource.send method, params: params
       end
     end
