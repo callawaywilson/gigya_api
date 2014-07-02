@@ -11,11 +11,18 @@ module GigyaApi
       @@defaults == options
     end
 
+    def self.define_api_method(method, config)
+      define_method(method) do |params = {}|
+        self.send config[:type], config[:path], params
+      end
+    end
+
     def initialize(params = {})
       @api_key = params[:api_key] || @@defaults[:api_key]
       @secret = params[:secret] || @@defaults[:secret]
       @uid = params[:uid]
       @oauth_token = params[:oauth_token]
+      @http_client = params[:http_client] || HttpClient.new
     end
 
     def provider_profile(provider)
@@ -25,14 +32,14 @@ module GigyaApi
       end
     end
 
-
-    private
-
     def get(path, params = {})
       url = "#{@@defaults[:host]}/#{path}"
-      response = client(url).get params: default_params.merge(params)
-      JSON.load response
+      response = @http_client.execute :get, url, default_params.merge(params)
+      MultiJson.load response
     end
+
+
+    private
 
     def default_params
       p = {apiKey: @api_key, secret: @secret, format: 'json'}
@@ -42,16 +49,20 @@ module GigyaApi
     end
 
     def client(url)
-      RestClient::Resource.new url, 
+      @http_client_class.new url, 
         :timeout => @@defaults[:timeout], 
         :open_timeout => @@defaults[:open_timeout]
     end
 
-    def define_api_method(method, config)
-      define_method(method) do |params = {}|
-        self.send val[:type], val[:path], params
+    class HttpClient
+      def execute(method, url, params)
+        resource = RestClient::Resource.new url, 
+          :timeout => @@defaults[:timeout], 
+          :open_timeout => @@defaults[:open_timeout]
+        resource.send method, params: params
       end
     end
 
   end
+
 end

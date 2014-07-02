@@ -1,0 +1,1 @@
+require 'gigya_api'
