@@ -60,6 +60,7 @@ module GigyaApi
 
     class HttpClient
       def execute(method, url, params)
+        defaults = GigyaApi::Client.defaults
         resource = RestClient::Resource.new url, 
           :timeout => defaults[:timeout], 
           :open_timeout => defaults[:open_timeout]
