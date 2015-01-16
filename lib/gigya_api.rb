@@ -1,4 +1,4 @@
-require 'rest_client'
+require 'rest-client'
 require 'multi_json'
 
 require 'gigya_api/version'
