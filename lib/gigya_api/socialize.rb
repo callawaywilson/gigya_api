@@ -2,7 +2,6 @@ module GigyaApi
   class Socialize < Client
 
     { 
-      get_token: {type: :get, path: 'socialize.getToken'},
       checkin: {type: :get, path: 'socialize.checkin'},
       delete_account: {type: :get, path: 'socialize.deleteAccount'},
       del_user_settings: {type: :get, path: 'socialize.delUserSettings'},
@@ -29,6 +28,11 @@ module GigyaApi
       set_user_settings: {type: :get, path: 'socialize.setUserSettings'},
       shorten_url: {type: :get, path: 'socialize.shortenURL'}
     }.each { |method, config| define_api_method method, config }
+
+    def get_token params={}
+      _params = params.merge client_id: @api_key, client_secret: @secret
+      get 'socialize.getToken', _params
+    end
 
   end
 end
